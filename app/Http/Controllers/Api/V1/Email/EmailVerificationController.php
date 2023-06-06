@@ -20,6 +20,7 @@ class EmailVerificationController extends Controller
 
     /**
      * Send Verification Code To Users Email Address
+     * @param $request users email address
      */
     public function send(Request $request)
     {
@@ -27,7 +28,7 @@ class EmailVerificationController extends Controller
             'email' => 'required|email|min:3|max:200|unique:users,email',
         ]);
 
-        //check is Email Already In Database (email_verification table)
+        //Check is Email Already In Database (email_verification table)
         $email = $request->email;
         $is_in_db = EmailVerification::where('email', '=', $email)->first();
         $code = $this->generateCode();
@@ -48,6 +49,30 @@ class EmailVerificationController extends Controller
         } catch (Exception $error) {
             return response()->json(['message' => "Faild Send Email", 'error' => true], 500);
         }
+    }
 
+    /**
+     * Validate User Input Code With Database Code
+     * @param Request $request
+     */
+    public function verify(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|string',
+            'code' => 'required|string',
+        ]);
+
+        $email = $request->email;
+        $code = $request->code;
+        $email_in_db = EmailVerification::where('email', '=', $email)->first();
+
+        if ($email_in_db) {
+            if ($email_in_db->code == $code) {
+                $email_in_db->delete();
+                return response()->json(['message' => 'Validaion Success', 'is_valid' => true, 'error' => false], 200);
+            }
+        }
+
+        return response()->json(['message' => 'Invalid Code', 'is_valid' => false, 'error' => true], 203);
     }
 }

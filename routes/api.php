@@ -21,6 +21,7 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
 Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 Route::post('send-verification-email', [EmailVerificationController::class, 'send']);
+Route::post('verify-email', [EmailVerificationController::class, 'verify']);
 
 Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
     Route::get('user', [UserController::class, 'index']);
