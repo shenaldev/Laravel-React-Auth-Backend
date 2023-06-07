@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\Email\EmailVerificationController;
 use App\Http\Controllers\Api\V1\Roles\UserRolesController;
 use App\Http\Controllers\Api\V1\UserController;
