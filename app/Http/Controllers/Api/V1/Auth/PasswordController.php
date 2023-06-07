@@ -69,6 +69,42 @@ class PasswordController extends Controller
     }
 
     /**
+     * Verify Token That User Enters
+     * @param Request $request [email]
+     * @param $token
+     */
+    public function verifyToken(Request $request, $token)
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        $email = $request->email;
+        $email_in_reset_table = PasswordResetTokens::where('email', '=', $email)->first();
+
+        //IF Email Not In The Table password_reset_tokens Return Invalid Token
+        if (!$email_in_reset_table) {
+            return response()->json(['message' => "Invalid token", 'error' => true], 400);
+        }
+
+        //If Token Not Match
+        if ($token !== $email_in_reset_table->token) {
+            return response()->json(['message' => "Invalid token", 'error' => true], 400);
+        }
+
+        //If Token Expired
+        $current_timestamp = Carbon::now();
+        $updated_at_timestamp = Carbon::parse($email_in_reset_table->updated_at);
+        $time_difference = $current_timestamp->diff($updated_at_timestamp);
+
+        if ($time_difference->i >= $this->TOKEN_EXPIRES_IN) {
+            return response()->json(['message' => "The token has expired. Please request a new token.", 'error' => true], 400);
+        }
+
+        return response()->json(['message' => "success", 'error' => false], 200);
+    }
+
+    /**
      * RESET THE USERS PASSWORD
      * @param Request $request [email, token, password]
      */
@@ -110,6 +146,5 @@ class PasswordController extends Controller
         PasswordResetTokens::destroy($email_in_reset_table->id);
 
         return response()->json(['message' => "Your password has been successfully reset.", 'error' => false], 200);
-
     }
 }
