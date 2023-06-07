@@ -47,7 +47,7 @@ class EmailVerificationController extends Controller
             Mail::to($email)->send(new EmailVerificationMail($code));
             return response()->json(['message' => 'Success', 'error' => false], 200);
         } catch (Exception $error) {
-            return response()->json(['message' => "Faild Send Email", 'error' => true], 500);
+            return response()->json(['message' => "Failed to send email", 'error' => true], 500);
         }
     }
 
