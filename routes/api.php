@@ -24,6 +24,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 Route::post('/send-verification-email', [EmailVerificationController::class, 'send'])->middleware('guest');
 Route::post('/verify-email', [EmailVerificationController::class, 'verify'])->middleware('guest');
 Route::post('/forgot-password', [PasswordController::class, 'sendResetMail']);
+Route::post('/reset-password', [PasswordController::class, 'resetPassword']);
 
 Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
     Route::get('/user', [UserController::class, 'index']);
