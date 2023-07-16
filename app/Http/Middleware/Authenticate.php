@@ -20,7 +20,7 @@ class Authenticate extends Middleware
 
     public function handle($request, Closure $next, ...$guards)
     {
-        $token = $request->cookie('_token');
+        $token = $request->cookie(env("AUTH_TOKEN_NAME"));
         $decToken = false;
 
         try {

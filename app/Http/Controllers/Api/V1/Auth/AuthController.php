@@ -19,7 +19,7 @@ class AuthController extends Controller
     use UserRolesTrait;
 
     protected $COOKIE_EXPIRE_TIME = 1 * (60 * 24 * 7);
-    protected $AUTH_COOKIE_NAME = '_token';
+    protected $AUTH_COOKIE_NAME = "agri_token";
 
     /**
      * @param Request $request
