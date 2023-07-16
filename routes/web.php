@@ -13,6 +13,12 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
+Route::domain("admin.agricartly.test")->group(function () {
+    Route::get("/", function () {
+        echo "admin";
+    });
+});
+
 Route::get('/', function () {
     return ['laravel', app()->version()];
 });

@@ -11,15 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('profiles', function (Blueprint $table) {
             $table->id();
-            $table->string('fname');
-            $table->string('lname');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
+            $table->string("avatar")->nullable();
+            $table->string("contact_no");
+            $table->bigInteger("district_id", false, true);
             $table->timestamps();
+            //FORIGN KEYS
+            $table->foreign("district_id")->on("districts")->references("id")->cascadeOnDelete()->cascadeOnUpdate();
         });
     }
 
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('profiles');
     }
 };
